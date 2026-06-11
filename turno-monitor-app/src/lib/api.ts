@@ -1,6 +1,6 @@
 import type { Monitor, Sede, Room, CreateTurnBody } from "@/types";
 
-const API_BASE = "http://localhost:3000/api";
+const API_BASE = "/api";
 
 const headers: HeadersInit = {
   "Content-Type": "application/json",
