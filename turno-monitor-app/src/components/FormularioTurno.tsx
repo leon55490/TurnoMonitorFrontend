@@ -164,7 +164,7 @@ export default function FormularioTurno() {
     return (
       <div className={styles.contenedor}>
         <div className={styles.errorInit} role="alert">
-          <strong>No se pudo conectar con el servidor.</strong>
+          <strong>No fue posible conectar con el servidor.</strong>
           <span>{errorInit}</span>
         </div>
       </div>
@@ -177,7 +177,7 @@ export default function FormularioTurno() {
       <div className={styles.contenedor}>
         <div className={styles.loading} aria-busy="true" aria-label="Cargando datos">
           <span className={styles.spinner} />
-          <span>Cargando datos…</span>
+          <span>Cargando información del sistema...</span>
         </div>
       </div>
     );
