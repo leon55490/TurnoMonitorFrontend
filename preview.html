@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TurnoMonitores · Asignar turno</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #f9fafb;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 3rem 1rem;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.75rem;
+      padding: 2rem;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    .header {
+      margin-bottom: 1.75rem;
+    }
+
+    .eyebrow {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #6b7280;
+      margin-bottom: 0.35rem;
+    }
+
+    h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: #374151;
+    }
+
+    input, select {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+      font-size: 0.9375rem;
+      color: #111827;
+      background: #fff;
+      width: 100%;
+      transition: border-color 0.15s;
+      outline: none;
+      font-family: inherit;
+    }
+
+    input:focus, select:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+    }
+
+    .fila {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .fila label { flex: 1; }
+
+    .btn {
+      margin-top: 0.25rem;
+      padding: 0.625rem 1.25rem;
+      background: #1d4ed8;
+      color: #fff;
+      border: none;
+      border-radius: 0.375rem;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-family: inherit;
+    }
+
+    .btn:hover:not(:disabled) { background: #1e40af; }
+
+    .btn:disabled {
+      background: #93c5fd;
+      cursor: not-allowed;
+    }
+
+    .mensaje {
+      padding: 0.75rem 1rem;
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+      display: none;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .mensaje.visible { display: flex; }
+
+    .mensaje.exito {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      color: #166534;
+    }
+
+    .mensaje.error {
+      background: #fef2f2;
+      border: 1px solid #fca5a5;
+      color: #991b1b;
+    }
+
+    .mensaje strong { font-weight: 600; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #f3f4f6;
+      margin: 1rem 0 0.5rem;
+    }
+
+    .simulador-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #9ca3af;
+      margin-bottom: 0.5rem;
+    }
+
+    .simulador-botones {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .sim-btn {
+      padding: 0.3rem 0.75rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      border-radius: 0.25rem;
+      border: 1px solid;
+      cursor: pointer;
+      font-family: inherit;
+      background: transparent;
+      transition: opacity 0.1s;
+    }
+
+    .sim-btn:hover { opacity: 0.75; }
+
+    .sim-btn.s201 { border-color: #86efac; color: #166534; }
+    .sim-btn.s409 { border-color: #fca5a5; color: #991b1b; }
+    .sim-btn.s400 { border-color: #fcd34d; color: #92400e; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="header">
+    <p class="eyebrow">Universidad de Caldas · TurnoMonitores</p>
+    <h1>Asignar turno</h1>
+  </div>
+
+  <form id="form-turno">
+    <label>
+      Salón
+      <select name="salon_id" required>
+        <option value="">Selecciona un salón</option>
+        <option value="salon-cisco">Cisco</option>
+        <option value="salon-j">Sala J</option>
+      </select>
+    </label>
+
+    <label>
+      Monitor
+      <select name="monitor_id" required>
+        <option value="">Selecciona un monitor</option>
+        <option value="monitor-1">Stiven Osorio</option>
+        <option value="monitor-2">Jackeline Rivera</option>
+      </select>
+    </label>
+
+    <label>
+      Materia
+      <input type="text" name="materia" placeholder="Ej: Cálculo diferencial" required />
+    </label>
+
+    <label>
+      Fecha
+      <input type="date" name="fecha" required />
+    </label>
+
+    <div class="fila">
+      <label>
+        Hora inicio
+        <input type="time" name="hora_inicio" required />
+      </label>
+      <label>
+        Hora fin
+        <input type="time" name="hora_fin" required />
+      </label>
+    </div>
+
+    <div id="mensaje-exito" class="mensaje exito">
+      <strong>Turno asignado correctamente.</strong>
+      <span id="detalle-exito"></span>
+    </div>
+
+    <div id="mensaje-error" class="mensaje error">
+      <span id="detalle-error"></span>
+    </div>
+
+    <button type="submit" class="btn" id="btn-enviar">Asignar turno</button>
+
+    <hr class="divider" />
+    <p class="simulador-label">Simular respuesta del backend</p>
+    <div class="simulador-botones">
+      <button type="button" class="sim-btn s201" onclick="simular(201)">201 Éxito</button>
+      <button type="button" class="sim-btn s409" onclick="simular(409)">409 Conflicto</button>
+      <button type="button" class="sim-btn s400" onclick="simular(400)">400 Validación</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  const SALONES = { "salon-cisco": "Cisco", "salon-j": "Sala J" };
+  const MONITORES = { "monitor-1": "Stiven Osorio", "monitor-2": "Jackeline Rivera" };
+
+  const form = document.getElementById("form-turno");
+  const btn = document.getElementById("btn-enviar");
+  const elExito = document.getElementById("mensaje-exito");
+  const elError = document.getElementById("mensaje-error");
+  const detalleExito = document.getElementById("detalle-exito");
+  const detalleError = document.getElementById("detalle-error");
+
+  function limpiarMensajes() {
+    elExito.classList.remove("visible");
+    elError.classList.remove("visible");
+  }
+
+  function mostrarExito(salon, monitor, fecha, inicio, fin) {
+    detalleExito.textContent = monitor + " · " + salon + " · " + fecha + " · " + inicio + "–" + fin;
+    elExito.classList.add("visible");
+    elError.classList.remove("visible");
+  }
+
+  function mostrarError(mensaje) {
+    detalleError.textContent = mensaje;
+    elError.classList.add("visible");
+    elExito.classList.remove("visible");
+  }
+
+  function leerFormulario() {
+    const datos = Object.fromEntries(new FormData(form));
+    return {
+      salon_id: datos.salon_id,
+      monitor_id: datos.monitor_id,
+      materia: datos.materia,
+      fecha: datos.fecha,
+      hora_inicio: datos.hora_inicio,
+      hora_fin: datos.hora_fin,
+      salon_nombre: SALONES[datos.salon_id] ?? datos.salon_id,
+      monitor_nombre: MONITORES[datos.monitor_id] ?? datos.monitor_id,
+    };
+  }
+
+  async function simular(codigo) {
+    limpiarMensajes();
+    btn.disabled = true;
+    btn.textContent = "Asignando…";
+
+    const d = leerFormulario();
+
+    await new Promise(r => setTimeout(r, 900));
+
+    if (codigo === 201) {
+      mostrarExito(d.salon_nombre, d.monitor_nombre, d.fecha, d.hora_inicio, d.hora_fin);
+      form.reset();
+    } else if (codigo === 409) {
+      mostrarError("El monitor ya tiene un turno asignado en ese horario.");
+    } else if (codigo === 400) {
+      mostrarError("Datos inválidos: revisa la fecha y el rango horario.");
+    }
+
+    btn.disabled = false;
+    btn.textContent = "Asignar turno";
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    limpiarMensajes();
+    btn.disabled = true;
+    btn.textContent = "Asignando…";
+
+    const d = leerFormulario();
+
+    try {
+      const res = await fetch("/turns", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-User-Role": "coordinador",
+        },
+        body: JSON.stringify({
+          monitor_id: d.monitor_id,
+          room_id: d.salon_id,
+          materia: d.materia,
+          fecha: d.fecha,
+          start_time: d.hora_inicio,
+          end_time: d.hora_fin,
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (res.status === 201) {
+        mostrarExito(d.salon_nombre, d.monitor_nombre, d.fecha, d.hora_inicio, d.hora_fin);
+        form.reset();
+      } else if (res.status === 409) {
+        mostrarError(data.detalle ?? data.message ?? "Conflicto de horario.");
+      } else if (res.status === 400 || res.status === 422) {
+        mostrarError(data.error ?? data.message ?? "Datos inválidos.");
+      } else if (res.status === 404) {
+        mostrarError(data.message ?? "Recurso no encontrado.");
+      } else {
+        mostrarError("Error inesperado (" + res.status + ").");
+      }
+    } catch {
+      mostrarError("No se pudo conectar con el servidor. Usa los botones de simulación para probar.");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Asignar turno";
+    }
+  });
+</script>
+
+</body>
+</html>
